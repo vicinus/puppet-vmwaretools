@@ -30,17 +30,13 @@ class vmwaretools::params {
         # Do not deploy if the Puppet version is lower than the installed version
         $deploy_files = false
       }
-    }
-
-    if $vmwaretools::prevent_upgrade {
+    } elsif $vmwaretools::prevent_upgrade {
 
       if versioncmp($vmwaretools::version,$::vmwaretools_version) > 0 {
         # Do not deploy if the Puppet version is higher than the installed version
         $deploy_files = false
       }
-    }
-
-    if $deploy_files == undef {
+    } else {
 
       # If tools are installed and we're not preventing a downgrade or upgrade, deploy on version mismatch
       $deploy_files = $::vmwaretools_version ? {
