@@ -24,18 +24,12 @@ class vmwaretools::params {
   } else {
 
     # If tools are installed, are we handling downgrades or upgrades?
-    if $vmwaretools::prevent_downgrade {
-
-      if versioncmp($vmwaretools::version,$::vmwaretools_version) < 0 {
-        # Do not deploy if the Puppet version is lower than the installed version
-        $deploy_files = false
-      }
-    } elsif $vmwaretools::prevent_upgrade {
-
-      if versioncmp($vmwaretools::version,$::vmwaretools_version) > 0 {
-        # Do not deploy if the Puppet version is higher than the installed version
-        $deploy_files = false
-      }
+    if $vmwaretools::prevent_downgrade and versioncmp($vmwaretools::version,$::vmwaretools_version) < 0 {
+      # Do not deploy if the Puppet version is lower than the installed version
+      $deploy_files = false
+    } elsif $vmwaretools::prevent_upgrade and versioncmp($vmwaretools::version,$::vmwaretools_version) > 0 {
+      # Do not deploy if the Puppet version is higher than the installed version
+      $deploy_files = false
     } else {
 
       # If tools are installed and we're not preventing a downgrade or upgrade, deploy on version mismatch
@@ -68,7 +62,7 @@ class vmwaretools::params {
     default  => purged,
   }
 
-  if $::osfamily == 'RedHat' and $::lsbmajdistrelease == '5' {
+  if $::osfamily == 'RedHat' and $::operatingsystemmajrelease == '5' {
     if ('PAE' in $::kernelrelease) {
       $kernel_extension = regsubst($::kernelrelease, 'PAE$', '')
       $redhat_devel_package = "kernel-PAE-devel-${kernel_extension}"

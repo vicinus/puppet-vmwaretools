@@ -160,7 +160,7 @@ class vmwaretools (
       fail 'MD5 not given for VMware Tools installer package'
     }
 
-    if ($::lsbdistcodename == 'raring') {
+    if (getvar('lsbdistcodename') == 'raring') {
       fail 'Ubuntu 13.04 is not supported by this module'
     }
 
